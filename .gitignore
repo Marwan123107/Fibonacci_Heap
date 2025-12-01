@@ -1,0 +1,26 @@
+# VS Code User Settings & Workspace Files
+.vscode/
+!.vscode/settings.json    # Keep shared settings
+!.vscode/tasks.json       # Keep shared tasks  
+!.vscode/launch.json      # Keep debug configurations
+!.vscode/extensions.json  # Keep recommended extensions
+
+# Local History
+.vscode/History/
+
+# VS Code User Snippets (personal preferences)
+.vscode/*.code-snippets
+
+# VS Code User Keybindings (personal)
+.vscode/keybindings.json
+
+# VS Code Workspace Storage
+.vscode/workspaceStorage/
+
+# VS Code Machine-specific files
+.vscode/settings.json.user
+.vscode/argv.json
+
+# VS Code Profile-specific files
+.vscode/*.profile
+.vscode/profile/
