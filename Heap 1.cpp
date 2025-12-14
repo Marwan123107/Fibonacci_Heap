@@ -52,6 +52,8 @@ node* FibonacciHeap::insert(int key, const string &taskName){
 	newNode->mark = false;
 	newNode->parent = nullptr;
 	newNode->child = nullptr;
+
+
 }
 
 const node* FibonacciHeap::findMin() const{
