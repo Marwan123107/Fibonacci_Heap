@@ -44,6 +44,14 @@ node* FibonacciHeap::insert(int key, const string &taskName){
 	// 6. Return the new node handle
 	return newNode
 	*/
+
+
+	node* newNode = new node( key, taskName);
+
+	newNode->degree = 0;
+	newNode->mark = false;
+	newNode->parent = nullptr;
+	newNode->child = nullptr;
 }
 
 const node* FibonacciHeap::findMin() const{
