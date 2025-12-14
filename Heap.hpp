@@ -10,7 +10,7 @@ public:
     node* left;
     node* right;
     node* parent;
-    CircularDoublyLinkedList <node> *children;
+    CircularDoublyLinkedList<node> *children;
     // taskname not completed
     node(int val , string Tasknamepara) : key(val), left(nullptr), right(nullptr), parent(nullptr), Taskname(Tasknamepara) ,mark(false),degree(0) {
         //pointing to itself
@@ -36,10 +36,13 @@ class FibonacciHeap {
         delete[] rootlist;
     }
 
-    node* insert(int key, const string &taskName);
+    node* insert(node* newNode);
     node* findMin() const;
     node* extractMin();
     void decreaseKey(node* handle, int newKey);
     void deleteNode(node* handle);
-
+    void Link(node* x, node*y);
+    void Consolidate();
+    void Cut(node* x, node*y);
+    void cascading_cut(node* y);
 };

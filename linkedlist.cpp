@@ -19,9 +19,10 @@ public:
 template<typename t>
 class CircularDoublyLinkedList{
 private:
-    Node<t>* head;
+    
 
 public:
+    Node<t>* head;
     CircularDoublyLinkedList(){
         head = nullptr;
     }
@@ -30,7 +31,7 @@ public:
         return head == nullptr;
     }
 
-    void insertFirst(t value){
+    void insertFirst(t* value){
         Node<t>*newNode = new Node<t>(value);
 
         if(isEmpty()){
@@ -48,7 +49,7 @@ public:
         }
     }
 
-    void insertLast(t value){
+    void insertLast(t* value){
         if(isEmpty()){
             insertFirst(value);
             return;
@@ -64,7 +65,7 @@ public:
         head->prev = newNode;
     }
 
-    void deleteValue(int value){
+    void deleteValue(t* value){
         if(isEmpty()){
             cout<<"List is empty.";
             return;
@@ -111,7 +112,7 @@ public:
         return count;
     }
 
-    void insertAtIndex(int index, int value){
+    void insertAtIndex(int index, t* value){
         int n = size();
 
         if(index<0 || index > n){
