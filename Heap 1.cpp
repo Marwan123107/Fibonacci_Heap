@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Heap.hpp"
+#include "CircularDoublyLinkedList.hpp"
 using namespace std;
 
 int main() {
@@ -8,6 +9,9 @@ int main() {
 	cout << "Node created with key: " << a.key << " and Taskname: " << a.Taskname << endl << a.left << endl <<a.right<< endl<<a.child << endl<< a.degree << endl;
 	return 0;
 }
+
+
+
 
 node* FibonacciHeap::insert(int key, const string &taskName){
 	/*function insert(key, taskName):
@@ -46,12 +50,7 @@ node* FibonacciHeap::insert(int key, const string &taskName){
 	*/
 
 
-	node* newNode = new node( key, taskName);
-
-	newNode->degree = 0;
-	newNode->mark = false;
-	newNode->parent = nullptr;
-	newNode->child = nullptr;
+	
 
 
 }

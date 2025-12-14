@@ -1,21 +1,25 @@
 #include <iostream>
 using namespace std;
+
+template <typename t>
 class Node{
 public:
-    int data;
-    Node* next;
-    Node* prev;
+    t data;
+    Node<t>* next;
+    Node<t>* prev;
 
-    Node(int value){
+    Node(t value){
         data = value;
         next = this;
         prev = this;
     }
 
 };
+
+template<typename t>
 class CircularDoublyLinkedList{
 private:
-    Node* head;
+    Node<t>* head;
 
 public:
     CircularDoublyLinkedList(){
@@ -26,13 +30,13 @@ public:
         return head == nullptr;
     }
 
-    void insertFirst(int value){
-        Node*newNode = new Node(value);
+    void insertFirst(t value){
+        Node<t>*newNode = new Node<t>(value);
 
         if(isEmpty()){
             head = newNode;
         }else{
-            Node* tail = head->prev;
+            Node<t>* tail = head->prev;
 
             newNode->next = head;
             newNode->prev = tail;
@@ -44,14 +48,14 @@ public:
         }
     }
 
-    void insertLast(int value){
+    void insertLast(t value){
         if(isEmpty()){
             insertFirst(value);
             return;
         }
 
-        Node* newNode = new Node (value);
-        Node* tail = head->prev;
+        Node<t>* newNode = new Node<t> (value);
+        Node<t>* tail = head->prev;
 
         newNode->next = head;
         newNode->prev = tail;
@@ -66,7 +70,7 @@ public:
             return;
         }
 
-        Node* current = head;
+        Node<t>* current = head;
 
         do{
             if(current->data == value){
@@ -98,7 +102,7 @@ public:
         if(isEmpty()) return 0;
 
         int count = 0;
-        Node* temp = head;
+        Node<t>* temp = head;
         do{
             count++;
             temp=temp->next;
@@ -115,7 +119,7 @@ public:
             return;
         }
 
-        Node* newNode = new Node(value);
+        Node<t>* newNode = new Node<t>(value);
 
         if(isEmpty()){
             head = newNode;
@@ -123,7 +127,7 @@ public:
         }
 
         if(index == 0){
-            Node* tail = head->prev;
+            Node<t>* tail = head->prev;
 
             newNode->next = head;
             newNode->prev = tail;
@@ -134,7 +138,7 @@ public:
             return;
         }
 
-        Node* current = head;
+        Node<t>* current = head;
         for(int i = 0; i < index-1; i++){
             current = current->next;
         }
@@ -159,7 +163,7 @@ public:
             return;
         }
 
-        Node* current = head;
+        Node<t>* current = head;
 
         if(n==1){
             delete head;
@@ -168,9 +172,9 @@ public:
         }
 
         if(index == 0){
-            Node* tail = head->prev;
+            Node<t>* tail = head->prev;
+            Node<t>* toDelete = head;
             
-            Node* toDelete = head;
             head = head->next;
 
             tail->next = head;
