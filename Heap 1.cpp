@@ -204,6 +204,49 @@ void FibonacciHeap::Consolidate(){
 		// Update minNode
 		if minNode is nil or A[i].key < minNode.key:
 		minNode = A[i]*/
+	const int MAX_DEGREE = 64; // A safe upper bound for degrees
+	node* A[MAX_DEGREE];
+	for (int i = 0; i < MAX_DEGREE; i++){
+		A[i] = nullptr;
+	}
+	// Traverse root list
+	Node<node>* current = rootlist->head;
+	int rootSize = rootlist->size();
+	for (int i = 0; i < rootSize; i++){
+		node* x = &current->data;
+		int d = x->degree;
+
+		while (A[d] != nullptr){
+			node* y = A[d];
+			if (x->key > y->key){
+				node* temp = x; 
+				x = y; 
+				y = temp;
+			}
+			Link(x, y);
+			A[d] = nullptr;
+			d++;
+		}
+		A[d] = x;
+		Node<node>* next = current->next;
+
+		current = next;
+	}
+	// Rebuild root list and find new min
+	min = nullptr;
+	delete rootlist;
+	rootlist = new CircularDoublyLinkedList<node>();
+	for (int i = 0; i < MAX_DEGREE; i++){
+		if (A[i] != nullptr){
+			rootlist->insertLast(A[i]);
+			if (min == nullptr || A[i]->key < min->key){
+				min = A[i];
+			}
+		}
+	}
+
+
+
 }	
 
 //DONE
