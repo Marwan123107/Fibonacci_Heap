@@ -6,14 +6,18 @@ using namespace std;
 int main() {
 	// Just a test to create a node
 	node a(10,"Sample Task");
-	cout << "Node created with key: " << a.key << " and Taskname: " << a.Taskname << endl << a.left << endl <<a.right<< endl<<a.child << endl<< a.degree << endl;
+	cout << "Node created with key: " << a.key << " and Taskname: " << a.Taskname << endl << a.left << endl <<a.right<< endl<<a.children << endl<< a.degree << endl;
 	return 0;
 }
 
+<<<<<<< HEAD
 
 
 
 node* FibonacciHeap::insert(int key, const string &taskName){
+=======
+node* FibonacciHeap::insert(node* newNode){
+>>>>>>> 7d319953bf23d970f054d26acf734483763ff033
 	/*function insert(key, taskName):
 	// 1. Create a new Node object
 	newNode = new Node(key, taskName)
@@ -49,19 +53,42 @@ node* FibonacciHeap::insert(int key, const string &taskName){
 	return newNode
 	*/
 
+<<<<<<< HEAD
 
 	
 
 
+=======
+	//add newNode to root list
+	if(rootlist->isEmpty()){
+		rootlist->insertFirst(newNode);
+		newNode->left = newNode;
+		newNode->right = newNode;
+	}else{
+		node* minNode = findMin();
+
+		newNode->right = minNode->right;
+		newNode->left = minNode;
+
+		minNode->right->left = newNode;
+		minNode->right = newNode;
+	}
+
+	// update min pointer
+	if (min == nullptr || newNode->key < min->key){
+		min=newNode;
+	}
+
+	return newNode;
+>>>>>>> 7d319953bf23d970f054d26acf734483763ff033
 }
 
-const node* FibonacciHeap::findMin() const{
-	/*function findMin():
-	// The minNode pointer always points to the node with the minimum key
-	// in the root list.
-	return minNode*/
+//DONE
+node* FibonacciHeap::findMin() const{
+	return min;
 }
 
+//DONE
 node* FibonacciHeap::extractMin(){
 	/*function extractMin():
  	 z = findMin()
@@ -90,10 +117,80 @@ node* FibonacciHeap::extractMin(){
     // 4. Decrement node count
     n = n - 1
 
-  return z
+  	return z   */
 
-     // --- Helper Function for CONSOLIDATION ---
-    //function CONSOLIDATE():
+	node* min = findMin();
+	if (min != NULL){
+		Node<node>* current = min->children->head;
+		for (int i = 0; i < min->degree; i++){
+			current->data.parent = NULL;
+			insert(current->data.left);
+			current = current->next;
+		}
+	}
+
+	rootlist->deleteValue(min);
+
+	if (rootlist != NULL){
+		Consolidate();
+	}
+
+	return min;
+}
+
+//DONE
+void FibonacciHeap::decreaseKey(node* handle, int newKey){
+	/*function decreaseKey(handle, newKey):
+	// 1. Validate the new key
+	if newKey > handle.key:
+		error "New key is greater than current key"
+
+	// 2. Update the key
+	handle.key = newKey
+
+	y = handle.parent
+	// 3. Check for heap property violation
+	if y is not nil and handle.key < y.key:
+		CUT(handle, y)
+		CASCADING_CUT(y)
+
+	// 4. Update minNode if necessary
+	if handle.key < minNode.key:
+		minNode = handle*/
+
+		// 1. Validate the new key
+		if (newKey > handle->key) {
+			cout << "Error: new key is greater than current key" << endl;
+			return;
+		}
+
+		// 2. Update the key
+		handle->key = newKey;
+		node* parent = handle->parent;
+
+		// 3. Check for heap property violation
+
+		if (parent != nullptr && handle->key < parent->key) {
+			Cut(handle, parent);
+			cascading_cut(parent);
+		}
+
+
+		// 4. Update minNode if necessary
+		if (min == nullptr || handle->key < min->key) {
+			min = handle;
+		}	
+}	
+
+//DONE
+void FibonacciHeap::deleteNode(node* handle){
+	decreaseKey(handle, INT_MIN);
+	extractMin();
+}
+
+void FibonacciHeap::Consolidate(){
+	// --- Helper Function for CONSOLIDATION ---
+    /*//function CONSOLIDATE():
 	// 1. Create an auxiliary array A[0...D_n] where D_n is the max degree
 	initialize array A to all nil pointers
 
@@ -113,18 +210,64 @@ node* FibonacciHeap::extractMin(){
 
 		A[d] = x
 
-	// 2. Rebuild the root list from the array A and find the new minNode
-	minNode = nil
-	for each non-nil entry A[i] in array A:
+		// 2. Rebuild the root list from the array A and find the new minNode
+		minNode = nil
+		for each non-nil entry A[i] in array A:
 		// Add A[i] to the root list (clearing previous root list)
 		// ... root list rebuild logic ...
 
 		// Update minNode
 		if minNode is nil or A[i].key < minNode.key:
-		minNode = A[i]
+		minNode = A[i]*/
+	const int MAX_DEGREE = 64; // A safe upper bound for degrees
+	node* A[MAX_DEGREE];
+	for (int i = 0; i < MAX_DEGREE; i++){
+		A[i] = nullptr;
+	}
+	// Traverse root list
+	Node<node>* current = rootlist->head;
+	int rootSize = rootlist->size();
+	for (int i = 0; i < rootSize; i++){
+		node* x = &current->data;
+		int d = x->degree;
 
-	// --- Helper Function for LINKING ---
-	function LINK(y, x):
+		while (A[d] != nullptr){
+			node* y = A[d];
+			if (x->key > y->key){
+				node* temp = x; 
+				x = y; 
+				y = temp;
+			}
+			Link(x, y);
+			A[d] = nullptr;
+			d++;
+		}
+		A[d] = x;
+		Node<node>* next = current->next;
+
+		current = next;
+	}
+	// Rebuild root list and find new min
+	min = nullptr;
+	delete rootlist;
+	rootlist = new CircularDoublyLinkedList<node>();
+	for (int i = 0; i < MAX_DEGREE; i++){
+		if (A[i] != nullptr){
+			rootlist->insertLast(A[i]);
+			if (min == nullptr || A[i]->key < min->key){
+				min = A[i];
+			}
+		}
+	}
+
+
+
+}	
+
+//DONE
+void FibonacciHeap::Link(node* x, node*y){
+// --- Helper Function for LINKING ---
+	/*function LINK(y, x):
 	// Make y a child of x (x is the new parent)
 	// 1. Remove y from the root list
 	y.left.right = y.right
@@ -144,29 +287,17 @@ node* FibonacciHeap::extractMin(){
 	x.degree = x.degree + 1
 	// 4. Clear y's mark
 	y.mark = false*/
+	
+	rootlist->deleteValue(y);
+	x->children->insertLast(y);
+	y->parent = x;
+	x->degree++;
+	y->mark = false;
 }
 
-void FibonacciHeap::decreaseKey(node* handle, int newKey){
-		/*function decreaseKey(handle, newKey):
-	// 1. Validate the new key
-	if newKey > handle.key:
-		error "New key is greater than current key"
-
-	// 2. Update the key
-	handle.key = newKey
-
-	y = handle.parent
-	// 3. Check for heap property violation
-	if y is not nil and handle.key < y.key:
-		CUT(handle, y)
-		CASCADING_CUT(y)
-
-	// 4. Update minNode if necessary
-	if handle.key < minNode.key:
-		minNode = handle
-
+void FibonacciHeap::Cut(node* x, node*y){
 	// --- Helper Function for CUT ---
-	function CUT(x, y):
+	/*function CUT(x, y):
 	// Remove x from the child list of y
 	// ... removal from circular list logic ...
 
@@ -176,10 +307,17 @@ void FibonacciHeap::decreaseKey(node* handle, int newKey){
 	// ... insertion into root list logic ...
 
 	x.parent = nil
-	x.mark = false
+	x.mark = false*/
+	y->children->deleteValue(x);
+	y->degree--;
+	insert(x);
+	x->parent = nullptr;
+	x->mark = false;
+}
 
+void FibonacciHeap::cascading_cut(node* y){
 	// --- Helper Function for CASCADING CUT ---
-	function CASCADING_CUT(y):
+	/*function CASCADING_CUT(y):
 	z = y.parent
 	if z is not nil:
 		if y.mark == false:
@@ -187,14 +325,13 @@ void FibonacciHeap::decreaseKey(node* handle, int newKey){
 		else:
 		CUT(y, z)
 		CASCADING_CUT(z)*/
-}
-
-void FibonacciHeap::deleteNode(node* handle){
-		/*function deleteNode(handle):
-	// 1. Decrease the key of the node to a value smaller than any other
-	// A common practice is to use a dedicated 'negative infinity' or INT_MIN.
-	decreaseKey(handle, NEGATIVE_INFINITY)
-
-	// 2. Extract the minimum, which is now the 'handle' node
-	extractMin()*/
-}
+	node* z = y->parent;
+	if (z != nullptr){
+		if (y->mark == false){
+			y->mark = true;
+		}else{
+			Cut(y, z);
+			cascading_cut(z);
+		}
+	}
+}		
