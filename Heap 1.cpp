@@ -1,23 +1,19 @@
 #include <iostream>
+#include "linkedlist.cpp"
 #include "Heap.hpp"
-#include "CircularDoublyLinkedList.hpp"
+
 using namespace std;
 
 int main() {
 	// Just a test to create a node
 	node a(10,"Sample Task");
-	cout << "Node created with key: " << a.key << " and Taskname: " << a.Taskname << endl << a.left << endl <<a.right<< endl<<a.children << endl<< a.degree << endl;
+	cout << "Node created with kesy: " << a.key << " and Taskname: " << a.Taskname << endl << a.left << endl <<a.right<< endl<<a.children << endl<< a.degree << endl;
 	return 0;
 }
 
-<<<<<<< HEAD
 
-
-
-node* FibonacciHeap::insert(int key, const string &taskName){
-=======
 node* FibonacciHeap::insert(node* newNode){
->>>>>>> 7d319953bf23d970f054d26acf734483763ff033
+
 	/*function insert(key, taskName):
 	// 1. Create a new Node object
 	newNode = new Node(key, taskName)
@@ -53,12 +49,12 @@ node* FibonacciHeap::insert(node* newNode){
 	return newNode
 	*/
 
-<<<<<<< HEAD
+
 
 	
 
 
-=======
+
 	//add newNode to root list
 	if(rootlist->isEmpty()){
 		rootlist->insertFirst(newNode);
@@ -80,7 +76,7 @@ node* FibonacciHeap::insert(node* newNode){
 	}
 
 	return newNode;
->>>>>>> 7d319953bf23d970f054d26acf734483763ff033
+
 }
 
 //DONE
@@ -121,10 +117,10 @@ node* FibonacciHeap::extractMin(){
 
 	node* min = findMin();
 	if (min != NULL){
-		Node<node>* current = min->children->head;
+		Node<node*>* current = min->children->head;
 		for (int i = 0; i < min->degree; i++){
-			current->data.parent = NULL;
-			insert(current->data.left);
+			current->data->parent = NULL;
+			insert(current->data->left);
 			current = current->next;
 		}
 	}
@@ -225,10 +221,10 @@ void FibonacciHeap::Consolidate(){
 		A[i] = nullptr;
 	}
 	// Traverse root list
-	Node<node>* current = rootlist->head;
+	Node<node*>* current = rootlist->head;
 	int rootSize = rootlist->size();
 	for (int i = 0; i < rootSize; i++){
-		node* x = &current->data;
+		node* x = current->data;
 		int d = x->degree;
 
 		while (A[d] != nullptr){
@@ -243,14 +239,14 @@ void FibonacciHeap::Consolidate(){
 			d++;
 		}
 		A[d] = x;
-		Node<node>* next = current->next;
+		Node<node*>* next = current->next;
 
 		current = next;
 	}
 	// Rebuild root list and find new min
 	min = nullptr;
 	delete rootlist;
-	rootlist = new CircularDoublyLinkedList<node>();
+	rootlist = new CircularDoublyLinkedList<node*>();
 	for (int i = 0; i < MAX_DEGREE; i++){
 		if (A[i] != nullptr){
 			rootlist->insertLast(A[i]);

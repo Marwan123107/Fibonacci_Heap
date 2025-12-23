@@ -1,3 +1,6 @@
+#ifndef LINKEDLIST_HPP
+#define LINKEDLIST_HPP
+
 #include <iostream>
 using namespace std;
 
@@ -31,7 +34,7 @@ public:
         return head == nullptr;
     }
 
-    void insertFirst(t* value){
+    void insertFirst(t value){
         Node<t>*newNode = new Node<t>(value);
 
         if(isEmpty()){
@@ -49,7 +52,7 @@ public:
         }
     }
 
-    void insertLast(t* value){
+    void insertLast(t value){
         if(isEmpty()){
             insertFirst(value);
             return;
@@ -65,7 +68,7 @@ public:
         head->prev = newNode;
     }
 
-    void deleteValue(t* value){
+    void deleteValue(t value){
         if(isEmpty()){
             cout<<"List is empty.";
             return;
@@ -112,7 +115,7 @@ public:
         return count;
     }
 
-    void insertAtIndex(int index, t* value){
+    void insertAtIndex(int index, t value){
         int n = size();
 
         if(index<0 || index > n){
@@ -230,3 +233,6 @@ public:
         cout << "(TAIL)\n";
     }*/
 };
+
+
+#endif
